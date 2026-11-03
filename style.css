@@ -1,0 +1,511 @@
+/*-----------------------------------------------------------------------
+Template Name      : Zavique - Fashion and Lifestyle Ecommerce HTML Template
+Author             : pus_infotech
+Author Portfolio   : https://themeforest.net/user/pus_infotech 
+Version            : 1.0.0 
+-----------------------------------------------------------------------
+CSS TABLE OF CONTENTS
+-----------------------------------------------------------------------
+- base 
+    - variables
+    - mixin
+    - reset
+    - typography
+    - forms
+
+- components 
+    - accordion
+    - breadcrumb
+    - buttons
+    - offcanvus
+    - widget
+
+- theme
+    - animations
+    - common
+    - preloader 
+    - spacing
+    - theme-class
+ 
+- layout
+    -header
+        - header
+        - meanmenu
+    - footer 
+        - footer
+    - section
+        - about
+        - authentication
+        - blog
+        - cart
+        - category
+        - checkout
+        - comingsoon
+        - contact
+        - counter
+        - cta
+        - dashboard
+        - faq
+        - gallery
+        - goal
+        - hero
+        - instagram
+        - newarrivals
+        - orderreceived
+        - policy
+        - selling
+        - shop
+        - team
+        - testimonials
+        - video
+        - wishlist
+        
+/* ERLUX Custom Brand Styling */
+.logo img,
+.offcanvas-logo img,
+.footer-logo img {
+    max-height: 65px !important;
+    width: auto !important;
+    object-fit: contain;
+    transition: transform 0.3s ease;
+}
+.logo a:hover img {
+    transform: scale(1.03);
+}
+.preloader-text p {
+    font-weight: 700;
+    letter-spacing: 0.15em;
+}
+.category-item .category-image img {
+    height: 120px;
+    width: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+}
+.shop-grid-item .shop-grid-image img {
+    width: 100%;
+    height: 320px;
+    object-fit: cover;
+}
+.shop-grid-item .discount {
+    background-color: #d4af37 !important;
+    color: #0b1320 !important;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+}
+.new-arrivals-item .new-arrivals-image img {
+    width: 100%;
+    height: 380px;
+    object-fit: cover;
+}
+
+/* ==========================================================================
+   ERLUX LUXURY VIDEO HERO SECTION (Transparent Text Overlay Advertising Style)
+   ========================================================================== */
+.erlux-cinematic-hero {
+    position: relative;
+    width: 100%;
+    height: clamp(650px, 80vh, 800px);
+    min-height: 600px;
+    background: transparent;
+    overflow: hidden;
+}
+
+.erlux-hero-slider {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.erlux-hero-slide {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.8s cubic-bezier(0.25, 1, 0.5, 1), visibility 0.8s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.erlux-hero-slide.active {
+    opacity: 1;
+    visibility: visible;
+    z-index: 2;
+    pointer-events: auto;
+}
+
+/* Video Background - 100% Full Brightness, Natural & Vibrant, No Overlays */
+.erlux-hero-video-wrap {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.erlux-hero-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform: translate(-50%, -50%);
+    filter: none !important;
+    opacity: 1 !important;
+}
+
+/* Transparent Text Overlay (No Cards, No Rectangular Boxes, No Backgrounds) */
+.erlux-hero-content {
+    position: relative;
+    z-index: 5;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 60px 0 110px;
+    max-width: 740px;
+    transform: translateY(22px);
+    opacity: 0;
+    transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.15s, opacity 0.8s ease 0.15s;
+}
+
+.erlux-hero-slide.active .erlux-hero-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+/* Campaign Kicker Badge */
+.erlux-campaign-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(10, 15, 25, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.38);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 6px 18px;
+    border-radius: 30px;
+    margin-bottom: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: #f5df97;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.erlux-campaign-kicker .kicker-gem {
+    color: #f5df97;
+    font-size: 11px;
+}
+
+/* Large, Elegant Typography Directly Floating Over Video */
+.erlux-hero-title {
+    font-family: inherit;
+    font-size: clamp(38px, 5.4vw, 66px);
+    font-weight: 800;
+    line-height: 1.08;
+    color: #ffffff;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    margin-bottom: 18px;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.65), 0 1px 3px rgba(0, 0, 0, 0.85);
+}
+
+.erlux-hero-title .gold-text {
+    color: #f5df97;
+    background: linear-gradient(135deg, #fae6a2 0%, #d4af37 50%, #c49622 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
+    text-shadow: none;
+}
+
+.erlux-hero-subtitle {
+    font-size: clamp(17px, 2vw, 22px);
+    font-weight: 400;
+    line-height: 1.55;
+    color: rgba(255, 255, 255, 0.95);
+    margin-bottom: 32px;
+    max-width: 580px;
+    text-shadow: 0 1px 10px rgba(0, 0, 0, 0.65), 0 1px 3px rgba(0, 0, 0, 0.75);
+}
+
+/* Dark-Text Variant for Bright Daylight Scenes (e.g. Slide 3) */
+.erlux-hero-slide.slide-dark-text .erlux-hero-title {
+    color: #0b1320;
+    text-shadow: 0 1px 10px rgba(255, 255, 255, 0.7), 0 2px 20px rgba(255, 255, 255, 0.5);
+}
+
+.erlux-hero-slide.slide-dark-text .erlux-hero-title .gold-text {
+    color: #b88e1e;
+    background: linear-gradient(135deg, #c59b27 0%, #946d0a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline;
+}
+
+.erlux-hero-slide.slide-dark-text .erlux-hero-subtitle {
+    color: #1e293b;
+    text-shadow: 0 1px 8px rgba(255, 255, 255, 0.7);
+}
+
+.erlux-hero-slide.slide-dark-text .erlux-campaign-kicker {
+    background: rgba(255, 255, 255, 0.65);
+    border: 1px solid rgba(11, 19, 32, 0.25);
+    color: #0b1320;
+    text-shadow: none;
+}
+
+.erlux-hero-slide.slide-dark-text .erlux-campaign-kicker .kicker-gem {
+    color: #b88e1e;
+}
+
+/* Buttons Container Directly Over Video (No Background Panel) */
+.erlux-hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px;
+    background: transparent !important;
+    border: none !important;
+    padding: 0 !important;
+}
+
+/* Premium Gold CTA Button */
+.erlux-btn-gold {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f5df97 0%, #d4af37 50%, #b88e1e 100%);
+    color: #0b0c10 !important;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 16px 36px;
+    border-radius: 4px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    border: none;
+}
+
+.erlux-btn-gold:hover {
+    background: linear-gradient(135deg, #fff2be 0%, #e8c558 50%, #cfa025 100%);
+    box-shadow: 0 8px 28px rgba(212, 175, 55, 0.6);
+    transform: translateY(-2px);
+    color: #000000 !important;
+}
+
+/* Transparent Secondary Button with Thin Border */
+.erlux-btn-outline {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    border: 1.5px solid rgba(255, 255, 255, 0.75);
+    color: #ffffff !important;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 15px 30px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.erlux-btn-outline:hover {
+    border-color: #f5df97;
+    color: #f5df97 !important;
+    background: rgba(212, 175, 55, 0.14) !important;
+    transform: translateY(-2px);
+}
+
+.erlux-hero-slide.slide-dark-text .erlux-btn-outline {
+    border-color: rgba(11, 19, 32, 0.75);
+    color: #0b1320 !important;
+    text-shadow: none;
+}
+
+.erlux-hero-slide.slide-dark-text .erlux-btn-outline:hover {
+    border-color: #0b1320;
+    background: rgba(11, 19, 32, 0.08) !important;
+    color: #0b1320 !important;
+}
+
+/* Minimalist Slide Indicators (No White Panel, Pure Transparent Background) */
+.erlux-hero-bottom-bar {
+    position: absolute;
+    bottom: 28px;
+    left: 0;
+    width: 100%;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.erlux-hero-tabs-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 24px;
+    pointer-events: auto;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    padding: 0 !important;
+    margin: 0;
+}
+
+.erlux-hero-tab {
+    cursor: pointer;
+    padding: 4px 0;
+    transition: opacity 0.3s ease;
+    opacity: 0.55;
+    position: relative;
+    user-select: none;
+    background: transparent;
+    border: none;
+}
+
+.erlux-hero-tab:hover {
+    opacity: 0.85;
+}
+
+.erlux-hero-tab.active {
+    opacity: 1;
+}
+
+.erlux-hero-tab .tab-index {
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    color: #f5df97;
+    margin-bottom: 2px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+    display: block;
+}
+
+.erlux-hero-tab .tab-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    color: #ffffff;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+    display: block;
+}
+
+.erlux-hero-tab .tab-progress {
+    width: 65px;
+    height: 2px;
+    background: rgba(255, 255, 255, 0.35);
+    border-radius: 2px;
+    overflow: hidden;
+    position: relative;
+}
+
+.erlux-hero-tab .tab-progress-bar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 0%;
+    background: #f5df97;
+    box-shadow: 0 0 8px rgba(245, 223, 151, 0.8);
+    transition: width 0.1s linear;
+}
+
+.erlux-hero-tab.active .tab-progress-bar {
+    width: 100%;
+    transition: width 7.5s linear;
+}
+
+/* Responsive Media Queries */
+@media (max-width: 991px) {
+    .erlux-cinematic-hero {
+        height: 620px;
+        min-height: 560px;
+    }
+    .erlux-hero-content {
+        padding: 40px 0 90px;
+        max-width: 580px;
+    }
+    .erlux-hero-tabs-wrap {
+        gap: 16px;
+    }
+    .erlux-hero-tab .tab-progress {
+        width: 48px;
+    }
+}
+
+@media (max-width: 767px) {
+    .erlux-cinematic-hero {
+        height: 560px;
+        min-height: 520px;
+    }
+    .erlux-hero-content {
+        padding: 30px 10px 80px;
+        max-width: 100%;
+    }
+    .erlux-campaign-kicker {
+        padding: 4px 14px;
+        font-size: 11px;
+        margin-bottom: 14px;
+    }
+    .erlux-hero-title {
+        font-size: 30px;
+        line-height: 1.14;
+        margin-bottom: 12px;
+    }
+    .erlux-hero-subtitle {
+        font-size: 15px;
+        margin-bottom: 22px;
+    }
+    .erlux-btn-gold {
+        padding: 13px 26px;
+        font-size: 12px;
+        letter-spacing: 0.1em;
+    }
+    .erlux-btn-outline {
+        padding: 12px 22px;
+        font-size: 12px;
+    }
+    .erlux-hero-tabs-wrap {
+        gap: 10px;
+    }
+    .erlux-hero-tab .tab-progress {
+        width: 36px;
+    }
+    .erlux-hero-tab .tab-label {
+        font-size: 9px;
+        letter-spacing: 0.05em;
+    }
+    .erlux-hero-tab .tab-index {
+        font-size: 9px;
+    }
+}
+
+/* Reduced Motion Mode */
+@media (prefers-reduced-motion: reduce) {
+    .erlux-hero-slide,
+    .erlux-hero-content,
+    .erlux-hero-tab .tab-progress-bar {
+        transition: none !important;
+        animation: none !important;
+    }
+}
+
+
+
+
