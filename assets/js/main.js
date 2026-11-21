@@ -129,31 +129,41 @@ JS TABLE OF CONTENTS
 
 		// ------------------------ 8. category slider
 		if($('.category-slider').length > 0) {
-            const testimonialsTwoSlider = new Swiper(".category-slider", {
+            const categorySlider = new Swiper(".category-slider", {
 				loop: true,
-				slidesPerView: 1,
-				spaceBetween: 24,
+				slidesPerView: 1.3,
+				spaceBetween: 16,
+				speed: 800,
 				autoplay: {
-					delay: 3500,
+					delay: 3000,
 					disableOnInteraction: false,
+					pauseOnMouseEnter: true,
 				},	
 				pagination: {
-                    el: ".dot",
+                    el: ".category-slider-pagination",
                     clickable: true,
                 },			
 				breakpoints: {
 					320: {
-						slidesPerView: 1.5,
+						slidesPerView: 1.3,
+						spaceBetween: 16,
 					},
-					567: {
+					576: {
 						slidesPerView: 2,   
+						spaceBetween: 18,
 					},
 					768: {
 						slidesPerView: 3,
+						spaceBetween: 20,
 					},
-					991: {
-						slidesPerView: 3,
+					992: {
+						slidesPerView: 4,
+						spaceBetween: 22,
 					},
+					1200: {
+						slidesPerView: 5,
+						spaceBetween: 24,
+					}
 				}				 
             });
         } 
