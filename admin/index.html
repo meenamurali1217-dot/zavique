@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERLUX — Executive Admin Suite & Atelier Management</title>
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="../assets/images/favicon.png" type="image/x-icon">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <!-- FontAwesome CSS -->
+    <link rel="stylesheet" href="../assets/css/fontawesome-all.min.css">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --erlux-gold: #d4af37;
+            --erlux-gold-light: #f5df97;
+            --erlux-bg: #0b111e;
+            --erlux-card: #111827;
+            --erlux-card-border: rgba(212, 175, 55, 0.2);
+            --erlux-text: #e2e8f0;
+            --erlux-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--erlux-bg);
+            color: var(--erlux-text);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        /* Admin Layout */
+        .admin-wrapper {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .admin-sidebar {
+            width: 270px;
+            background: #0d1322;
+            border-right: 1px solid var(--erlux-card-border);
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 100;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .sidebar-brand img {
+            max-height: 44px;
+            width: auto;
+        }
+
+        .sidebar-brand-text {
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            color: var(--erlux-gold);
+            text-transform: uppercase;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 16px 12px;
+            margin: 0;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu li {
+            margin-bottom: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            color: #94a3b8;
+            font-size: 13.5px;
+            font-weight: 600;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-menu a i {
+            font-size: 15px;
+            width: 20px;
+            color: #64748b;
+            transition: color 0.2s ease;
+        }
+
+        .sidebar-menu a:hover,
+        .sidebar-menu a.active {
+            color: #ffffff;
+            background: rgba(212, 175, 55, 0.12);
+            border-left: 3px solid var(--erlux-gold);
+        }
+
+        .sidebar-menu a:hover i,
+        .sidebar-menu a.active i {
+            color: var(--erlux-gold);
+        }
+
+        .sidebar-footer {
+            padding: 16px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        /* Main Content */
+        .admin-main {
+            margin-left: 270px;
+            flex: 1;
+            padding: 28px 36px;
+            min-height: 100vh;
+        }
+
+        /* Header Bar */
+        .admin-topbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        .admin-page-title h1 {
+            font-size: 24px;
+            font-weight: 800;
+            color: #ffffff;
+            margin: 0 0 4px 0;
+        }
+
+        .admin-page-title p {
+            color: var(--erlux-muted);
+            font-size: 13px;
+            margin: 0;
+        }
+
+        .admin-user-profile {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .admin-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--erlux-gold);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--erlux-gold);
+            font-weight: 700;
+        }
+
+        /* Cards & Metrics */
+        .metric-card {
+            background: var(--erlux-card);
+            border: 1px solid var(--erlux-card-border);
+            border-radius: 8px;
+            padding: 22px;
+            transition: transform 0.2s, border-color 0.2s;
+        }
+
+        .metric-card:hover {
+            border-color: var(--erlux-gold);
+            transform: translateY(-2px);
+        }
+
+        .metric-label {
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--erlux-gold);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 800;
+            color: #ffffff;
+            margin-bottom: 6px;
+        }
+
+        .metric-sub {
+            font-size: 12px;
+            color: var(--erlux-muted);
+        }
+
+        /* Custom Dark Tables */
+        .admin-card {
+            background: var(--erlux-card);
+            border: 1px solid var(--erlux-card-border);
+            border-radius: 8px;
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .admin-card-header {
+            padding: 18px 24px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .admin-card-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #ffffff;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .table-custom {
+            margin: 0;
+            color: #cbd5e1;
+            font-size: 13.5px;
+        }
+
+        .table-custom th {
+            background: #0d1322;
+            color: var(--erlux-gold);
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 14px 18px;
+            border-bottom: 1px solid rgba(212, 175, 55, 0.25);
+        }
+
+        .table-custom td {
+            padding: 14px 18px;
+            vertical-align: middle;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            background: transparent;
+        }
+
+        .table-custom tr:hover td {
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        .status-badge.confirmed { background: rgba(59, 130, 246, 0.2); color: #60a5fa; border: 1px solid #3b82f6; }
+        .status-badge.processing { background: rgba(245, 158, 11, 0.2); color: #fbbf24; border: 1px solid #f59e0b; }
+        .status-badge.shipped { background: rgba(168, 85, 247, 0.2); color: #c084fc; border: 1px solid #a855f7; }
+        .status-badge.delivered { background: rgba(16, 185, 129, 0.2); color: #34d399; border: 1px solid #10b981; }
+        .status-badge.cancelled { background: rgba(239, 68, 68, 0.2); color: #f87171; border: 1px solid #ef4444; }
+
+        /* Buttons */
+        .btn-gold {
+            background: var(--erlux-gold);
+            color: #0b111e;
+            font-weight: 700;
+            font-size: 12px;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 10px 20px;
+            border-radius: 4px;
+            border: none;
+            transition: background 0.2s;
+        }
+
+        .btn-gold:hover {
+            background: var(--erlux-gold-light);
+            color: #0b111e;
+        }
+
+        .btn-outline-gold {
+            background: transparent;
+            border: 1px solid var(--erlux-gold);
+            color: var(--erlux-gold);
+            font-weight: 600;
+            font-size: 12px;
+            letter-spacing: 0.08em;
+            padding: 8px 16px;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .btn-outline-gold:hover {
+            background: var(--erlux-gold);
+            color: #0b111e;
+        }
+
+        /* Modal Customization */
+        .modal-content {
+            background: #111827;
+            border: 1px solid var(--erlux-gold);
+            color: #ffffff;
+        }
+
+        .modal-header {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .modal-footer {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .form-control, .form-select {
+            background: #0d1322;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #ffffff;
+            font-size: 13.5px;
+        }
+
+        .form-control:focus, .form-select:focus {
+            background: #0d1322;
+            border-color: var(--erlux-gold);
+            color: #ffffff;
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.25);
+        }
+
+        /* Login Screen */
+        .admin-login-wrap {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: radial-gradient(circle at center, #172236 0%, #0b111e 100%);
+            padding: 20px;
+        }
+
+        .admin-login-box {
+            width: 100%;
+            max-width: 440px;
+            background: #111827;
+            border: 1px solid var(--erlux-gold);
+            border-radius: 8px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. LOGIN OVERLAY (Shows when not authenticated) -->
+    <div id="adminLoginScreen" class="admin-login-wrap">
+        <div class="admin-login-box">
+            <img src="../assets/images/logo/erlux-logo.png" alt="ERLUX Logo" style="max-height: 60px; margin-bottom: 20px;">
+            <h2 style="font-size: 20px; font-weight: 800; color: #ffffff; margin-bottom: 4px;">Executive Atelier Portal</h2>
+            <p style="color: var(--erlux-muted); font-size: 13px; margin-bottom: 28px;">ERLUX Global Headquarters Access</p>
+
+            <div id="loginAlert" class="alert alert-danger d-none" style="font-size: 13px;"></div>
+
+            <form id="adminLoginForm">
+                <div class="mb-3 text-start">
+                    <label class="form-label" style="font-size: 12px; font-weight: 600; color: #cbd5e1;">Director Email</label>
+                    <input type="email" id="adminEmail" class="form-control" value="admin@erlux.com" required placeholder="admin@erlux.com">
+                </div>
+                <div class="mb-4 text-start">
+                    <label class="form-label" style="font-size: 12px; font-weight: 600; color: #cbd5e1;">Master Secret Key</label>
+                    <input type="password" id="adminPassword" class="form-control" value="ErLux@2026!Admin" required placeholder="••••••••••••">
+                </div>
+                <button type="submit" class="btn btn-gold w-100 py-2">Authenticate Executive Session</button>
+            </form>
+            <div style="font-size: 11px; color: #64748b; margin-top: 24px;">
+                Protected by 256-Bit Cryptographic Vault &bull; ERLUX 2026
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. MAIN ADMIN PORTAL (Visible after Login) -->
+    <div id="adminDashboardApp" class="admin-wrapper d-none">
+
+        <!-- Sidebar -->
+        <aside class="admin-sidebar">
+            <div class="sidebar-brand">
+                <img src="../assets/images/logo/erlux-logo.png" alt="ERLUX">
+                <div>
+                    <div class="sidebar-brand-text">ERLUX</div>
+                    <div style="font-size: 9.5px; color: #94a3b8; letter-spacing: 0.1em;">EXECUTIVE SUITE</div>
+                </div>
+            </div>
+
+            <ul class="sidebar-menu">
+                <li><a href="#" class="active" onclick="switchTab('dashboard'); return false;"><i class="fa-solid fa-chart-pie"></i> Executive Overview</a></li>
+                <li><a href="#" onclick="switchTab('products'); return false;"><i class="fa-solid fa-gem"></i> Creations Catalog</a></li>
+                <li><a href="#" onclick="switchTab('orders'); return false;"><i class="fa-solid fa-bag-shopping"></i> Orders & Logistics</a></li>
+                <li><a href="#" onclick="switchTab('inventory'); return false;"><i class="fa-solid fa-warehouse"></i> Inventory & Stock</a></li>
+                <li><a href="#" onclick="switchTab('categories'); return false;"><i class="fa-solid fa-layer-group"></i> Nine Collections</a></li>
+                <li><a href="#" onclick="switchTab('customers'); return false;"><i class="fa-solid fa-users"></i> Patron Directory</a></li>
+                <li><a href="#" onclick="switchTab('coupons'); return false;"><i class="fa-solid fa-ticket"></i> Privilege Coupons</a></li>
+                <li><a href="#" onclick="switchTab('reviews'); return false;"><i class="fa-solid fa-star"></i> Reviews Moderation</a></li>
+                <li><a href="../index.html" target="_blank"><i class="fa-solid fa-arrow-up-right-from-square"></i> View Live Store</a></li>
+            </ul>
+
+            <div class="sidebar-footer">
+                <div style="color: #cbd5e1; font-weight: 700; margin-bottom: 4px;" id="adminFullName">Executive Director</div>
+                <button onclick="adminLogout()" class="btn btn-sm btn-outline-danger w-100 mt-2" style="font-size: 11px;">
+                    <i class="fa-solid fa-arrow-right-from-bracket me-1"></i> Terminate Session
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Body -->
+        <main class="admin-main">
+            <!-- Topbar -->
+            <div class="admin-topbar">
+                <div class="admin-page-title">
+                    <h1 id="tabTitle">Executive Overview</h1>
+                    <p id="tabSubtitle">Real-time enterprise intelligence & sales metrics</p>
+                </div>
+                <div class="admin-user-profile">
+                    <button class="btn btn-outline-gold me-2" onclick="exportSalesReport()"><i class="fa-solid fa-file-csv me-1"></i> Export Sales CSV</button>
+                    <div class="admin-avatar">EX</div>
+                </div>
+            </div>
+
+            <!-- TAB 1: DASHBOARD OVERVIEW -->
+            <div id="tab-dashboard" class="tab-content-panel">
+                <!-- KPI Tiles -->
+                <div class="row g-4 mb-4">
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="metric-card">
+                            <div class="metric-label"><span>Gross Revenue</span><i class="fa-solid fa-coins"></i></div>
+                            <div class="metric-value" id="kpiRevenue">₹0</div>
+                            <div class="metric-sub" style="color: #10b981;"><i class="fa-solid fa-arrow-trend-up"></i> All Verified Luxury Sales</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="metric-card">
+                            <div class="metric-label"><span>Total Orders</span><i class="fa-solid fa-receipt"></i></div>
+                            <div class="metric-value" id="kpiOrders">0</div>
+                            <div class="metric-sub">Across 9 ERLUX collections</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="metric-card">
+                            <div class="metric-label"><span>Active Patrons</span><i class="fa-solid fa-user-check"></i></div>
+                            <div class="metric-value" id="kpiCustomers">0</div>
+                            <div class="metric-sub">Registered VIP Clients</div>
+                        </div>
+                    </div>
+                    <div class="col-xl-3 col-sm-6">
+                        <div class="metric-card">
+                            <div class="metric-label"><span>Low Stock Alerts</span><i class="fa-solid fa-triangle-exclamation text-warning"></i></div>
+                            <div class="metric-value text-warning" id="kpiLowStock">0</div>
+                            <div class="metric-sub">Requiring Atelier replenishment</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-8">
+                        <div class="admin-card p-4">
+                            <div class="admin-card-title mb-4"><i class="fa-solid fa-chart-line" style="color:var(--erlux-gold);"></i> Monthly Revenue Performance (INR)</div>
+                            <div style="height: 280px;">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="admin-card p-4">
+                            <div class="admin-card-title mb-4"><i class="fa-solid fa-chart-pie" style="color:var(--erlux-gold);"></i> Revenue by Collection</div>
+                            <div style="height: 280px; position: relative;">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Orders -->
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-clock-rotate-left" style="color:var(--erlux-gold);"></i> Recent Client Orders</h3>
+                        <button class="btn btn-sm btn-outline-gold" onclick="switchTab('orders')">View All &rarr;</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Client</th>
+                                    <th>Total (INR)</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recentOrdersTable">
+                                <tr><td colspan="7" class="text-center py-4 text-muted">Loading metrics...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: PRODUCTS MANAGEMENT -->
+            <div id="tab-products" class="tab-content-panel d-none">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-gem" style="color:var(--erlux-gold);"></i> ERLUX Master Products Directory</h3>
+                        <button class="btn btn-gold" onclick="openNewProductModal()"><i class="fa-solid fa-plus me-1"></i> Add Creation</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Creation</th>
+                                    <th>SKU</th>
+                                    <th>Collection</th>
+                                    <th>Price (INR)</th>
+                                    <th>Stock</th>
+                                    <th>Variants</th>
+                                    <th>Rating</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="productsTableBody">
+                                <tr><td colspan="8" class="text-center py-4 text-muted">Loading catalog...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: ORDERS MANAGEMENT -->
+            <div id="tab-orders" class="tab-content-panel d-none">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-boxes-packing" style="color:var(--erlux-gold);"></i> Client Orders & Dispatch Pipeline</h3>
+                        <div class="d-flex gap-2">
+                            <select id="orderStatusFilter" class="form-select form-select-sm" onchange="loadAdminOrders()" style="width: 160px;">
+                                <option value="ALL">All Statuses</option>
+                                <option value="CONFIRMED">CONFIRMED</option>
+                                <option value="PROCESSING">PROCESSING</option>
+                                <option value="PACKED">PACKED</option>
+                                <option value="SHIPPED">SHIPPED</option>
+                                <option value="DELIVERED">DELIVERED</option>
+                                <option value="CANCELLED">CANCELLED</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Order #</th>
+                                    <th>Customer</th>
+                                    <th>Items</th>
+                                    <th>Total</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th>Tracking</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="ordersTableBody">
+                                <tr><td colspan="8" class="text-center py-4 text-muted">Loading orders...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 4: INVENTORY MANAGEMENT -->
+            <div id="tab-inventory" class="tab-content-panel d-none">
+                <div class="admin-card mb-4">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-warehouse" style="color:var(--erlux-gold);"></i> Stock Levels & Atelier Thresholds</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>SKU</th>
+                                    <th>Category</th>
+                                    <th>Current Stock</th>
+                                    <th>Threshold</th>
+                                    <th>Status</th>
+                                    <th>Quick Restock</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryTableBody">
+                                <tr><td colspan="7" class="text-center py-4 text-muted">Loading inventory...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-history" style="color:var(--erlux-gold);"></i> Audit Log of Stock Transactions</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Timestamp</th>
+                                    <th>Product</th>
+                                    <th>Event</th>
+                                    <th>Change</th>
+                                    <th>New Stock</th>
+                                    <th>Actor / Reason</th>
+                                </tr>
+                            </thead>
+                            <tbody id="inventoryLogsBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Loading audit logs...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 5: CATEGORIES -->
+            <div id="tab-categories" class="tab-content-panel d-none">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-layer-group" style="color:var(--erlux-gold);"></i> The Nine Sovereign Collections</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Order</th>
+                                    <th>Collection</th>
+                                    <th>Slug</th>
+                                    <th>Subcategories</th>
+                                    <th>Creations Count</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="categoriesTableBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Loading collections...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 6: CUSTOMERS -->
+            <div id="tab-customers" class="tab-content-panel d-none">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-users" style="color:var(--erlux-gold);"></i> Registered Patrons & VIP Clientele</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Patron Name</th>
+                                    <th>Email</th>
+                                    <th>Phone</th>
+                                    <th>Total Orders</th>
+                                    <th>Lifetime Spend</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="customersTableBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Loading clientele...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 7: COUPONS -->
+            <div id="tab-coupons" class="tab-content-panel d-none">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-ticket" style="color:var(--erlux-gold);"></i> Privilege Promo Codes</h3>
+                        <button class="btn btn-gold" onclick="openNewCouponModal()"><i class="fa-solid fa-plus me-1"></i> Create Privilege Code</button>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Code</th>
+                                    <th>Description</th>
+                                    <th>Type</th>
+                                    <th>Value</th>
+                                    <th>Min Order</th>
+                                    <th>Redemptions</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="couponsTableBody">
+                                <tr><td colspan="7" class="text-center py-4 text-muted">Loading coupons...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 8: REVIEWS -->
+            <div id="tab-reviews" class="tab-content-panel d-none">
+                <div class="admin-card">
+                    <div class="admin-card-header">
+                        <h3 class="admin-card-title"><i class="fa-solid fa-star" style="color:var(--erlux-gold);"></i> Patron Review Moderation</h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom">
+                            <thead>
+                                <tr>
+                                    <th>Creation</th>
+                                    <th>Patron</th>
+                                    <th>Rating</th>
+                                    <th>Review Headline & Comment</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="reviewsTableBody">
+                                <tr><td colspan="6" class="text-center py-4 text-muted">Loading reviews...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL: ORDER STATUS UPDATE -->
+    <div class="modal fade" id="orderModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" style="color:var(--erlux-gold);" id="orderModalTitle">Update Order Dispatch</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body" id="orderModalBody">
+                    <form id="orderStatusForm">
+                        <input type="hidden" id="modalOrderId">
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label" style="font-size:12px; font-weight:700;">Workflow Status</label>
+                                <select id="modalOrderStatus" class="form-select">
+                                    <option value="CONFIRMED">CONFIRMED</option>
+                                    <option value="PROCESSING">PROCESSING</option>
+                                    <option value="PACKED">PACKED</option>
+                                    <option value="SHIPPED">SHIPPED</option>
+                                    <option value="DELIVERED">DELIVERED</option>
+                                    <option value="CANCELLED">CANCELLED</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label" style="font-size:12px; font-weight:700;">Courier Name</label>
+                                <input type="text" id="modalCourierName" class="form-control" placeholder="e.g. DHL Express Luxe">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" style="font-size:12px; font-weight:700;">Tracking Number / Waybill</label>
+                                <input type="text" id="modalTrackingNumber" class="form-control" placeholder="e.g. DHL-VIP-8823901">
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label" style="font-size:12px; font-weight:700;">Audit Notes</label>
+                                <textarea id="modalStatusNotes" class="form-control" rows="2" placeholder="e.g. Dispatched via armored transport"></textarea>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-gold w-100 py-2">Commit Workflow Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle JS -->
+    <script src="../assets/js/bootstrap.bundle.min.js"></script>
+    <!-- Admin Controller -->
+    <script src="../assets/js/erlux-admin.js"></script>
+</body>
+</html>
