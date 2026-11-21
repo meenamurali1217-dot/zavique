@@ -336,18 +336,18 @@
 
   // Update Badge Counters
   function updateCartBadge(count) {
-    const badges = document.querySelectorAll('.cart-btn span, .erlux-cart-badge');
+    const badges = document.querySelectorAll('.cart-btn span, .erlux-cart-badge, .mobile-bottom-navigation-menu .erlux-cart-badge');
     badges.forEach(b => {
-      b.textContent = count || 0;
-      b.className = 'erlux-badge';
+      b.textContent = count !== undefined && count !== null ? count : 0;
+      if (!b.classList.contains('erlux-badge')) b.classList.add('erlux-badge');
     });
   }
 
   function updateWishlistBadge(count) {
-    const badges = document.querySelectorAll('.heart-btn span, .erlux-wishlist-badge');
+    const badges = document.querySelectorAll('.heart-btn span, .erlux-wishlist-badge, .mobile-bottom-navigation-menu .erlux-wishlist-badge');
     badges.forEach(b => {
-      b.textContent = count || 0;
-      b.className = 'erlux-badge';
+      b.textContent = count !== undefined && count !== null ? count : 0;
+      if (!b.classList.contains('erlux-badge')) b.classList.add('erlux-badge');
     });
   }
 
@@ -501,6 +501,59 @@
     });
   }
 
+  // Initialize and Sync Mobile Bottom Navigation
+  function initMobileBottomNav() {
+    const mobileNav = document.getElementById('erluxMobileBottomNav') || document.querySelector('.mobile-bottom-navigation-menu');
+    if (!mobileNav) return;
+
+    // Smart Account routing based on auth state
+    const accountLink = mobileNav.querySelector('#mobileNavAccountLink') || mobileNav.querySelector('[data-tab="account"]');
+    if (accountLink) {
+      const token = localStorage.getItem('erlux_user_token');
+      accountLink.href = token ? 'account-dashboard.html' : 'login.html';
+    }
+
+    // Determine current page
+    const path = window.location.pathname.toLowerCase();
+    const filename = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+
+    // Remove any hardcoded active classes
+    mobileNav.querySelectorAll('.mobile-bottom-navigation-item a').forEach(a => a.classList.remove('active'));
+
+    let activeTab = 'home';
+    if (filename.includes('wishlist')) {
+      activeTab = 'wishlist';
+    } else if (filename.includes('cart') || filename.includes('checkout')) {
+      activeTab = 'cart';
+    } else if (filename.includes('account') || filename.includes('login') || filename.includes('register')) {
+      activeTab = 'account';
+    } else if (filename.includes('shop') || filename.includes('category') || filename.includes('categories')) {
+      activeTab = 'categories';
+    } else if (filename === '' || filename === 'index.html' || filename.includes('home')) {
+      activeTab = 'home';
+    }
+
+    const currentTabEl = mobileNav.querySelector(`[data-tab="${activeTab}"]`);
+    if (currentTabEl) {
+      currentTabEl.classList.add('active');
+    }
+  }
+
+  // Highlight active navbar link on desktop and mobile
+  function highlightActiveNav() {
+    initMobileBottomNav();
+
+    const path = window.location.pathname.toLowerCase();
+    const filename = path.substring(path.lastIndexOf('/') + 1) || 'index.html';
+    const navLinks = document.querySelectorAll('.navbar-nav .nav-link, .header-navigation a');
+    navLinks.forEach(link => {
+      const href = (link.getAttribute('href') || '').toLowerCase();
+      if (href && (href === filename || (filename === 'index.html' && href.includes('index.html')))) {
+        link.classList.add('active');
+      }
+    });
+  }
+
   // Expose Global API
   window.erluxToast = showToast;
   window.openCartDrawer = openCartDrawer;
@@ -512,6 +565,7 @@
   window.toggleWishlist = toggleWishlist;
   window.updateCartBadge = updateCartBadge;
   window.updateWishlistBadge = updateWishlistBadge;
+  window.initMobileBottomNav = initMobileBottomNav;
 
   // Initialize on DOM Ready
   document.addEventListener('DOMContentLoaded', async () => {
@@ -519,7 +573,7 @@
     initSearchForm();
     initHeaderButtons();
 
-    // Highlight active navbar link
+    // Highlight active navbar link and init mobile bottom nav
     highlightActiveNav();
 
     // Refresh cart badge and wishlist badge

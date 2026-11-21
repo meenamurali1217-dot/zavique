@@ -2824,53 +2824,172 @@ button:focus {
   transform: scale(1);
 }
 
+/* ==========================================================================
+   ERLUX App-Style Mobile Bottom Navigation (WhatsApp UX Reference)
+   ========================================================================== */
 .mobile-bottom-navigation-menu {
   position: fixed;
   left: 0;
+  right: 0;
   bottom: 0;
   width: 100%;
-  background: var(--white-color);
-  box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.15);
-  transition: all 0.5s ease 0.5s;
-  z-index: 99;
+  background: #ffffff;
+  border-top: 1px solid rgba(16, 44, 64, 0.08);
+  box-shadow: 0 -3px 14px rgba(16, 44, 64, 0.07);
+  z-index: 1050;
   display: none;
+  padding-bottom: max(6px, env(safe-area-inset-bottom));
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
-@media (max-width: 1199px) {
+
+/* Strictly visible on mobile viewports (320px - 767px) */
+@media (max-width: 767px) {
   .mobile-bottom-navigation-menu {
-    display: block;
+    display: block !important;
   }
 }
+
+/* Strictly hidden on tablet and desktop screens (768px and above) */
+@media (min-width: 768px) {
+  .mobile-bottom-navigation-menu {
+    display: none !important;
+  }
+}
+
 .mobile-bottom-navigation-menu .mobile-bottom-navigation-wapper {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-}
-.mobile-bottom-navigation-menu .mobile-bottom-navigation-wapper .mobile-bottom-navigation-item a {
-  position: relative;
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: flex;
-  gap: 5px;
-  -webkit-align-items: center;
+  display: flex !important;
+  justify-content: space-around;
   align-items: center;
-  -webkit-flex-direction: column;
-  -moz-flex-direction: column;
-  flex-direction: column;
-  padding: 12px 0;
-  font-size: 13px;
-  color: var(--text-color);
+  width: 100%;
+  margin: 0;
+  padding: 4px 6px 0;
 }
-.mobile-bottom-navigation-menu .mobile-bottom-navigation-wapper .mobile-bottom-navigation-item a.active::before {
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item {
+  flex: 1;
+  text-align: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 2px 4px;
+  text-decoration: none;
+  color: #102C40;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a:active {
+  transform: scale(0.92);
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a .nav-icon-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a i {
+  font-size: 19px;
+  line-height: 1;
+  color: #102C40;
+  opacity: 0.72;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.72;
+  transition: all 0.2s ease;
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a span.nav-label,
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a span:not(.erlux-badge) {
+  font-size: 10.5px;
+  font-weight: 500;
+  line-height: 1.1;
+  margin-top: 3px;
+  color: #102C40;
+  opacity: 0.75;
+  letter-spacing: 0.2px;
+  text-transform: capitalize;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Active State (ERLUX Signature Orange #FF641C) */
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a.active i {
+  color: #FF641C !important;
+  opacity: 1 !important;
+  transform: scale(1.08);
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a.active span.nav-label,
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a.active span:not(.erlux-badge) {
+  color: #FF641C !important;
+  opacity: 1 !important;
+  font-weight: 600 !important;
+}
+
+.mobile-bottom-navigation-menu .mobile-bottom-navigation-item a.active::after {
   content: "";
-  height: 4px;
-  width: 50%;
-  background-color: var(--primary-color);
-  border-radius: 0 0 10px 10px;
   position: absolute;
   top: 0;
-  left: 0;
-  right: 0;
-  margin: 0 auto;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 22px;
+  height: 2.5px;
+  background-color: #FF641C;
+  border-radius: 0 0 3px 3px;
 }
+
+/* Badges for Wishlist and Cart */
+.mobile-bottom-navigation-menu .nav-icon-wrap .erlux-badge {
+  position: absolute;
+  top: -5px;
+  right: -9px;
+  background-color: #FF641C;
+  color: #ffffff;
+  font-size: 9.5px;
+  font-weight: 700;
+  min-width: 16px;
+  height: 16px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3.5px;
+  border: 1.5px solid #ffffff;
+  line-height: 1;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.15);
+  z-index: 2;
+  transition: transform 0.2s ease;
+}
+
+/* Mobile Content Bottom Padding Offset to avoid bottom nav overlap */
+@media (max-width: 767px) {
+  body {
+    padding-bottom: calc(65px + env(safe-area-inset-bottom)) !important;
+  }
+  
+  #back-top {
+    bottom: calc(75px + env(safe-area-inset-bottom)) !important;
+  }
+}
+
 
 main {
   padding: 198px 0 0;
@@ -5146,12 +5265,16 @@ main {
   font-size: 16px;
   color: var(--black-color);
 }
-.header .header-sidebar {
-  display: none;
+.header .header-sidebar,
+.header-1 .header-sidebar,
+.header-sidebar {
+  display: none !important;
 }
 @media (max-width: 1199px) {
-  .header .header-sidebar {
-    display: block;
+  .header .header-sidebar,
+  .header-1 .header-sidebar,
+  .header-sidebar {
+    display: flex !important;
   }
 }
 .header .header-sidebar .sidebar-toggler {
@@ -11699,5 +11822,131 @@ main {
   border-radius: 10px;
   background: #ff641c;
   opacity: 1;
+}
+
+.category-section {
+  overflow: hidden;
+}
+
+.wrapper {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ==========================================================================
+   ERLUX Mobile App-Style Responsiveness & Header Optimization
+   ========================================================================== */
+@media (max-width: 767px) {
+  html, body {
+    overflow-x: hidden !important;
+    max-width: 100vw !important;
+  }
+
+  .header-top {
+    padding: 6px 0;
+  }
+  .header-top .header-top-left {
+    display: none !important;
+  }
+  .header-top .header-coupons-info p {
+    font-size: 11px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .header-1 .header-center {
+    padding: 8px 0 !important;
+  }
+  .header-1 .header-center .header-content {
+    gap: 8px;
+  }
+  .header-1 .header-center .header-content .header-center-left {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+  .header-1 .header-center .header-content .header-center-left .logo img {
+    max-height: 40px !important;
+    width: auto;
+  }
+  .header-1 .header-center .header-content .header-center-left .header-sidebar .sidebar-toggler {
+    width: 40px;
+    height: 40px;
+  }
+  .header-1 .header-center .header-content .header-center-center {
+    width: 100% !important;
+    margin-top: 0 !important;
+    padding: 0 !important;
+  }
+  .header-1 .header-center .header-content .header-center-center .header-search-form-box {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px;
+    background: #f8f9fa;
+  }
+  .header-1 .header-center .header-content .header-center-center .header-search-form-box .header-search-form .form-group .form-control {
+    font-size: 13.5px;
+    padding: 8px 6px 8px 0;
+  }
+  .header-1 .header-center .header-content .header-center-center .header-search-form-box .header-search-form .form-group .header-search-btn {
+    font-size: 14px;
+    color: #102C40;
+  }
+
+  /* Header quick actions on mobile */
+  .mobile-header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .mobile-header-actions a.mobile-action-btn {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: #FFF4F5;
+    color: #102C40;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+  .mobile-header-actions a.mobile-action-btn:active {
+    transform: scale(0.92);
+  }
+  .mobile-header-actions a.mobile-action-btn i {
+    color: #102C40;
+  }
+  .mobile-header-actions a.mobile-action-btn .erlux-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: #FF641C;
+    color: #ffffff;
+    font-size: 9px;
+    font-weight: 700;
+    min-width: 15px;
+    height: 15px;
+    border-radius: 999px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 3px;
+    line-height: 1;
+    border: 1.5px solid #ffffff;
+  }
+
+  /* Touch target sizes for mobile buttons */
+  .theme-button, .read-more-btn {
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
 }
 /*# sourceMappingURL=main.css.map */
