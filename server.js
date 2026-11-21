@@ -64,6 +64,7 @@ app.use('/api/wishlist', require('./server/routes/wishlist'));
 app.use('/api/checkout', require('./server/routes/checkout'));
 app.use('/api', require('./server/routes/reviews'));
 app.use('/api/admin', require('./server/routes/admin'));
+app.use('/api/location', require('./server/routes/location'));
 
 // Admin Dashboard Route (serve directly without 301 redirect)
 app.get(['/admin', '/admin/'], (req, res) => {

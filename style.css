@@ -1145,4 +1145,635 @@ CSS TABLE OF CONTENTS
     font-size: 16px;
 }
 
+/* ==========================================================================
+   ERLUX LIVE CUSTOMER LOCATION COMPONENT & LUXURY POPUP MODAL
+   ========================================================================== */
+
+/* 1. Header Location Trigger */
+.header-location,
+#headerLocationTrigger {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 10px !important;
+    cursor: pointer !important;
+    padding: 6px 12px !important;
+    border-radius: 6px !important;
+    transition: all 0.25s ease !important;
+    background: transparent !important;
+    border: 1px solid rgba(212, 175, 55, 0.15) !important;
+    user-select: none !important;
+    text-decoration: none !important;
+}
+
+.header-location:hover,
+#headerLocationTrigger:hover {
+    background: rgba(212, 175, 55, 0.08) !important;
+    border-color: rgba(212, 175, 55, 0.4) !important;
+    box-shadow: 0 2px 8px rgba(212, 175, 55, 0.15) !important;
+}
+
+.header-location .location-icon {
+    width: 34px !important;
+    height: 34px !important;
+    background: rgba(212, 175, 55, 0.12) !important;
+    border: 1px solid rgba(212, 175, 55, 0.3) !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex-shrink: 0 !important;
+    transition: all 0.25s ease !important;
+}
+
+.header-location:hover .location-icon {
+    background: #d4af37 !important;
+    transform: scale(1.06) !important;
+}
+
+.header-location .location-icon img {
+    max-width: 16px !important;
+    max-height: 16px !important;
+    transition: filter 0.2s ease !important;
+}
+
+.header-location:hover .location-icon img {
+    filter: brightness(0) invert(1) !important;
+}
+
+.header-location .location-content {
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: center !important;
+    text-align: left !important;
+    line-height: 1.25 !important;
+}
+
+.header-location .location-label {
+    font-size: 10.5px !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.08em !important;
+    color: #94a3b8 !important;
+    margin-bottom: 2px !important;
+    display: block !important;
+}
+
+.header-location .location-value,
+#headerLocationText {
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    color: #111827 !important;
+    white-space: nowrap !important;
+    max-width: 175px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 5px !important;
+    transition: color 0.2s ease !important;
+}
+
+.header-location:hover .location-value {
+    color: #b89128 !important;
+}
+
+.header-location .location-value i,
+#headerLocationText i {
+    font-size: 9px !important;
+    color: #d4af37 !important;
+    transition: transform 0.2s ease !important;
+}
+
+.header-location:hover .location-value i {
+    transform: translateY(2px) !important;
+}
+
+/* 2. ERLUX Location Selection Modal & Backdrop */
+body.erlux-modal-open {
+    overflow: hidden !important;
+}
+
+.erlux-loc-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(5px);
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.erlux-loc-backdrop.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.erlux-loc-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+    pointer-events: none;
+}
+
+.erlux-loc-modal.show {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.erlux-loc-card {
+    background: #ffffff;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 520px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(212, 175, 55, 0.35);
+    border-top: 4px solid #d4af37;
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+}
+
+.erlux-loc-modal.show .erlux-loc-card {
+    transform: translateY(0) scale(1);
+}
+
+/* Modal Header */
+.erlux-loc-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.erlux-loc-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.erlux-loc-pin-icon {
+    width: 40px;
+    height: 40px;
+    background: linear-gradient(135deg, rgba(212, 175, 55, 0.2), rgba(212, 175, 55, 0.05));
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #d4af37;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.erlux-loc-header h3 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 3px 0;
+    letter-spacing: 0.02em;
+}
+
+.erlux-loc-header p {
+    font-size: 12px;
+    color: #64748b;
+    margin: 0;
+}
+
+.erlux-loc-close-btn {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    line-height: 1;
+    color: #94a3b8;
+    cursor: pointer;
+    padding: 0;
+    margin-left: 12px;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.erlux-loc-close-btn:hover {
+    color: #111827;
+    transform: scale(1.15);
+}
+
+/* Modal Body */
+.erlux-loc-body {
+    padding: 20px 24px;
+}
+
+/* Geolocation Button */
+.erlux-loc-action-box {
+    text-align: center;
+    margin-bottom: 16px;
+}
+
+.erlux-btn-use-location {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    padding: 13px 20px;
+    background: linear-gradient(135deg, #d4af37 0%, #b89128 100%);
+    color: #0b1320;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.35);
+    transition: all 0.25s ease;
+}
+
+.erlux-btn-use-location:hover {
+    background: linear-gradient(135deg, #f5df97 0%, #d4af37 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(212, 175, 55, 0.45);
+}
+
+.erlux-btn-use-location i {
+    font-size: 15px;
+}
+
+.erlux-loc-detect-note {
+    font-size: 11px;
+    color: #94a3b8;
+    margin-top: 6px;
+}
+
+/* Live Status & Spinner */
+.erlux-loc-status {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    color: #334155;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+}
+
+.erlux-loc-status i {
+    color: #d4af37;
+    font-size: 16px;
+}
+
+/* Error Notice */
+.erlux-loc-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 16px;
+    background: #fef2f2;
+    border: 1px solid #fecaca;
+    border-radius: 6px;
+    color: #991b1b;
+    font-size: 12.5px;
+    line-height: 1.4;
+    margin-bottom: 16px;
+}
+
+.erlux-loc-error i {
+    color: #dc2626;
+    font-size: 15px;
+    margin-top: 2px;
+    flex-shrink: 0;
+}
+
+/* Detected Address Preview Card */
+.erlux-detected-card {
+    background: #fdfbf7;
+    border: 1px solid rgba(212, 175, 55, 0.4);
+    border-left: 4px solid #d4af37;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(212, 175, 55, 0.08);
+}
+
+.erlux-detected-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #854d0e;
+    background: rgba(212, 175, 55, 0.15);
+    padding: 3px 8px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+}
+
+.erlux-detected-title {
+    font-size: 17px;
+    font-weight: 800;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.erlux-detected-address {
+    font-size: 12.5px;
+    color: #475569;
+    line-height: 1.4;
+    margin-bottom: 10px;
+}
+
+.erlux-detected-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 14px;
+}
+
+.erlux-meta-pill {
+    font-size: 11px;
+    font-weight: 600;
+    color: #334155;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.erlux-detected-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.erlux-btn-confirm {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #d4af37;
+    color: #0b1320;
+    border: none;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.erlux-btn-confirm:hover {
+    background: #f5df97;
+}
+
+.erlux-btn-change {
+    padding: 10px 14px;
+    background: transparent;
+    color: #64748b;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.erlux-btn-change:hover {
+    color: #111827;
+    border-color: #94a3b8;
+}
+
+/* Divider */
+.erlux-loc-divider {
+    text-align: center;
+    position: relative;
+    margin: 18px 0;
+}
+
+.erlux-loc-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: #e2e8f0;
+}
+
+.erlux-loc-divider span {
+    position: relative;
+    background: #ffffff;
+    padding: 0 12px;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    text-transform: uppercase;
+}
+
+/* Form inputs & Sections */
+.erlux-loc-manual-section,
+.erlux-loc-search-section {
+    margin-bottom: 16px;
+}
+
+.erlux-loc-label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #1e293b;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.erlux-loc-input-group {
+    display: flex;
+    gap: 8px;
+}
+
+.erlux-loc-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    font-size: 13.5px;
+    color: #111827;
+    background: #ffffff;
+    outline: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.erlux-loc-input:focus {
+    border-color: #d4af37;
+    box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.18);
+}
+
+.erlux-loc-input.pl-icon {
+    padding-left: 36px;
+}
+
+.erlux-loc-search-group {
+    position: relative;
+}
+
+.erlux-search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+.erlux-loc-btn-apply {
+    padding: 10px 20px;
+    background: #111827;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    font-size: 12.5px;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+}
+
+.erlux-loc-btn-apply:hover {
+    background: #d4af37;
+    color: #0b1320;
+}
+
+/* Autocomplete Search Results Dropdown */
+.erlux-loc-search-results {
+    background: #ffffff;
+    border: 1px solid rgba(212, 175, 55, 0.3);
+    border-radius: 4px;
+    margin-top: 4px;
+    max-height: 180px;
+    overflow-y: auto;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+.erlux-search-result-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: background 0.15s ease;
+}
+
+.erlux-search-result-item:last-child {
+    border-bottom: none;
+}
+
+.erlux-search-result-item:hover {
+    background: #faf8f2;
+}
+
+.erlux-search-result-item i {
+    color: #d4af37;
+    margin-top: 3px;
+    font-size: 13px;
+    flex-shrink: 0;
+}
+
+.erlux-res-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.erlux-res-sub {
+    font-size: 11px;
+    color: #64748b;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 380px;
+}
+
+.erlux-search-no-results {
+    padding: 12px;
+    text-align: center;
+    color: #94a3b8;
+    font-size: 12px;
+}
+
+/* Quick Luxury Hub Tags */
+.erlux-quick-cities {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.erlux-quick-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+}
+
+.erlux-quick-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.erlux-city-tag {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 4px;
+    padding: 4px 10px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #334155;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.erlux-city-tag:hover {
+    background: #faf8f2;
+    border-color: #d4af37;
+    color: #b89128;
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+    .erlux-loc-card {
+        max-width: 100%;
+        border-radius: 8px 8px 0 0;
+        max-height: 95vh;
+    }
+    .erlux-loc-modal {
+        align-items: flex-end;
+        padding: 0;
+    }
+    .header-location .location-value {
+        max-width: 120px !important;
+    }
+}
+
+
 

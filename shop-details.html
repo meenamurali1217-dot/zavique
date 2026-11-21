@@ -275,17 +275,13 @@
 
                                     <!-- header center right start -->
                                     <div class="header-center-right d-flex align-items-center gap-3"> 
-                                        <div class="header-location">
+                                        <div class="header-location" id="headerLocationTrigger" role="button" tabindex="0" title="Click to select delivery location" style="cursor: pointer;">
                                             <div class="location-icon">
                                                 <img src="assets/images/icons/location.png" alt="location">
                                             </div>
                                             <div class="location-content">
-                                                <label for="location">Your Location</label>
-                                                <select class="form-select default-select bootstrap-select" id="location" name="location" autocomplete="off">
-                                                    <option value="location1">location 1</option>
-                                                    <option value="location2">location 2</option>
-                                                    <option value="location3">location 3</option>
-                                                </select>
+                                                <span class="location-label">Your Location</span>
+                                                <span class="location-value" id="headerLocationText">Select Location <i class="fa-solid fa-chevron-down"></i></span>
                                             </div>
                                         </div>
                                         <!-- button wapper  -->
@@ -1303,6 +1299,7 @@
         <script src="assets/js/main.js"></script>
     
         <script src="assets/js/erlux-nav.js"></script>
+        <script src="assets/js/erlux-location.js"></script>
         <script src="assets/js/erlux-details.js"></script>
     </body>
 

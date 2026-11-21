@@ -103,6 +103,29 @@
       if (shippingEl) shippingEl.textContent = shipping === 0 ? 'Complimentary' : `₹${shipping}`;
       if (taxEl) taxEl.textContent = `₹${tax.toLocaleString('en-IN')}`;
       if (totalEl) totalEl.textContent = `₹${grandTotal.toLocaleString('en-IN')}`;
+
+      // Render delivery location ribbon in cart summary
+      const loc = window.erluxLocation ? window.erluxLocation.get() : null;
+      let locRow = container.querySelector('.cart-delivery-dest-row');
+      if (loc && (loc.locality || loc.city || loc.display)) {
+        const dest = loc.display || [loc.locality, loc.city].filter(Boolean).join(', ');
+        if (!locRow) {
+          locRow = document.createElement('div');
+          locRow.className = 'cart-delivery-dest-row d-flex justify-content-between align-items-center py-2';
+          locRow.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
+          locRow.style.fontSize = '12px';
+          const totalRow = container.querySelector('.order-total');
+          if (totalRow) {
+            totalRow.insertAdjacentElement('beforebegin', locRow);
+          } else {
+            container.appendChild(locRow);
+          }
+        }
+        locRow.innerHTML = `
+          <span style="color:#94a3b8;"><i class="fa-solid fa-location-dot" style="color:#d4af37; margin-right:4px;"></i> Deliver to:</span>
+          <span style="color:#ffffff; font-weight:600;">${dest} <a href="#" onclick="if(window.erluxLocation) window.erluxLocation.openModal(); return false;" style="color:#d4af37; text-decoration:underline; font-size:11px; margin-left:6px;">Change</a></span>
+        `;
+      }
     });
 
     // Store checkout total snapshot
@@ -113,6 +136,10 @@
     sessionStorage.setItem('erlux_checkout_tax', tax);
     sessionStorage.setItem('erlux_checkout_total', grandTotal);
   }
+
+  window.addEventListener('erlux:locationChanged', () => {
+    loadCartPage();
+  });
 
   // Handle Coupon Application
   function initCouponForm(cart) {

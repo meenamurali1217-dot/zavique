@@ -35,6 +35,7 @@
       renderGallery();
       renderProductInfo();
       renderVariants();
+      renderDeliveryEstimate();
       renderTabs();
       renderReviews();
       renderRelated();
@@ -44,6 +45,66 @@
       console.error('Error loading product details:', err);
     }
   }
+
+  // Delivery Estimate Widget linked with Live Location
+  function renderDeliveryEstimate() {
+    const infoContainer = document.querySelector('.shop-product-single-info');
+    if (!infoContainer) return;
+
+    let deliveryBox = document.getElementById('erluxProductDeliveryBox');
+    if (!deliveryBox) {
+      deliveryBox = document.createElement('div');
+      deliveryBox.id = 'erluxProductDeliveryBox';
+      deliveryBox.className = 'erlux-delivery-box mt-3 mb-3';
+
+      const qtyContainer = infoContainer.querySelector('.shop-product-single-quantity');
+      if (qtyContainer) {
+        infoContainer.insertBefore(deliveryBox, qtyContainer);
+      } else {
+        infoContainer.appendChild(deliveryBox);
+      }
+    }
+
+    const loc = window.erluxLocation ? window.erluxLocation.get() : null;
+    const destName = loc && (loc.locality || loc.city || loc.display)
+      ? (loc.display || [loc.locality, loc.city].filter(Boolean).join(', ') + (loc.postal_code ? ` (${loc.postal_code})` : ''))
+      : 'Select Location';
+
+    const now = new Date();
+    const daysToAdd = loc ? 2 : 3;
+    const estDate = new Date(now.getTime() + daysToAdd * 24 * 60 * 60 * 1000);
+    const dateFormatted = estDate.toLocaleDateString('en-IN', { weekday: 'short', month: 'short', day: 'numeric' });
+
+    deliveryBox.innerHTML = `
+      <div style="background: rgba(13, 19, 31, 0.85); border: 1px solid rgba(212,175,55,0.3); border-radius: 6px; padding: 14px 16px;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <div style="display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-truck-fast" style="color: #d4af37; font-size: 15px;"></i>
+            <span style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: #94a3b8; font-weight: 600;">Delivery To:</span>
+            <span style="font-size: 13px; font-weight: 700; color: #ffffff;" id="erluxProductDestText">${destName}</span>
+          </div>
+          <button type="button" class="erlux-btn-change-loc" onclick="if(window.erluxLocation) window.erluxLocation.openModal()" style="background: none; border: 1px solid rgba(212,175,55,0.4); color: #d4af37; padding: 2px 10px; border-radius: 3px; font-size: 11px; font-weight: 600; cursor: pointer;">
+            ${loc ? 'Change' : 'Check PIN'}
+          </button>
+        </div>
+        <div style="font-size: 12px; color: #cbd5e1; display: flex; flex-direction: column; gap: 4px;">
+          <div style="color: #10b981; font-weight: 600;">
+            <i class="fa-solid fa-circle-check" style="margin-right: 5px;"></i> Available for Immediate White-Glove Dispatch
+          </div>
+          <div>
+            <i class="fa-regular fa-calendar-check" style="color: #d4af37; margin-right: 5px;"></i> Estimated Delivery: <strong style="color: #ffffff;">${dateFormatted}</strong>
+          </div>
+          <div style="color: #94a3b8; font-size: 11px;">
+            <i class="fa-solid fa-shield-halved" style="color: #d4af37; margin-right: 5px;"></i> Complimentary White-Glove Courier Delivery on orders above ₹5,000
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  window.addEventListener('erlux:locationChanged', () => {
+    renderDeliveryEstimate();
+  });
 
   // Breadcrumbs
   function renderBreadcrumbs() {

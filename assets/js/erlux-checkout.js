@@ -55,6 +55,9 @@
       }
     }
 
+    // Render detected location banner for user confirmation
+    renderDetectedLocationPrompt();
+
     // 2. Load Cart for Order Summary
     try {
       const headers = { 'Content-Type': 'application/json' };
@@ -115,6 +118,80 @@
       checkoutForm.addEventListener('submit', handleOrderSubmit);
     }
   }
+
+  // Render Detected Location Confirmation Prompt Banner
+  function renderDetectedLocationPrompt() {
+    const heading = document.querySelector('.checkout-single .heading');
+    if (!heading) return;
+
+    let banner = document.getElementById('erluxCheckoutLocBanner');
+    const loc = window.erluxLocation ? window.erluxLocation.get() : null;
+
+    if (!loc || (!loc.city && !loc.locality)) {
+      if (banner) banner.remove();
+      return;
+    }
+
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.id = 'erluxCheckoutLocBanner';
+      banner.className = 'erlux-checkout-loc-banner mb-4';
+      heading.insertAdjacentElement('afterend', banner);
+    }
+
+    const displayAddr = loc.display || [loc.locality, loc.city].filter(Boolean).join(', ');
+    const fullPin = loc.postal_code ? ` - ${loc.postal_code}` : '';
+
+    banner.innerHTML = `
+      <div style="background: #0d131f; border: 1px solid rgba(212, 175, 55, 0.5); border-radius: 6px; padding: 14px 18px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.08);">
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <div style="width: 38px; height: 38px; border-radius: 50%; background: #d4af37; color: #0b1320; display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <div>
+            <div style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #d4af37; font-weight: 700;">Detected Delivery Residence</div>
+            <div style="color: #ffffff; font-weight: 700; font-size: 14.5px;">${displayAddr}${fullPin}</div>
+            <div style="color: #94a3b8; font-size: 12px;">${loc.state || 'India'}</div>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <button type="button" id="erluxBtnApplyDetectedLoc" style="background: #d4af37; color: #0b1320; border: none; font-weight: 700; font-size: 12px; padding: 8px 18px; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 6px; transition: opacity 0.2s;">
+            <i class="fa-solid fa-check"></i> Apply to Address
+          </button>
+          <button type="button" onclick="if(window.erluxLocation) window.erluxLocation.openModal()" style="background: transparent; color: #cbd5e1; border: 1px solid rgba(255,255,255,0.25); font-weight: 600; font-size: 12px; padding: 8px 14px; border-radius: 4px; cursor: pointer;">
+            Change
+          </button>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('erluxBtnApplyDetectedLoc')?.addEventListener('click', () => {
+      applyLocationToAddress(loc);
+    });
+  }
+
+  function applyLocationToAddress(loc) {
+    if (!loc) return;
+    const cityInput = document.getElementById('town');
+    const stateInput = document.getElementById('state');
+    const postInput = document.getElementById('postcode');
+    const addr1Input = document.getElementById('address');
+
+    if (cityInput && (loc.city || loc.locality)) cityInput.value = loc.city || loc.locality;
+    if (stateInput && loc.state) stateInput.value = loc.state;
+    if (postInput && loc.postal_code) postInput.value = loc.postal_code;
+    if (addr1Input && !addr1Input.value.trim() && loc.locality) {
+      addr1Input.value = loc.locality;
+    }
+
+    if (window.erluxToast) {
+      window.erluxToast('Delivery location applied to shipping address', 'fa-location-dot');
+    }
+  }
+
+  window.addEventListener('erlux:locationChanged', () => {
+    renderDetectedLocationPrompt();
+  });
 
   // Render Checkout Summary Table
   function renderCheckoutSummary(cart) {

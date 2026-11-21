@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS users (
   phone TEXT,
   password_hash TEXT NOT NULL,
   status TEXT NOT NULL DEFAULT 'active',
+  preferred_location TEXT,
   created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
   last_login DATETIME

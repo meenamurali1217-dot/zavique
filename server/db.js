@@ -29,6 +29,18 @@ function initSchema() {
 
 initSchema();
 
+// Migration: Add preferred_location to users table if not exists
+try {
+  const tableInfo = db.prepare('PRAGMA table_info(users);').all();
+  const hasPreferredLocation = tableInfo.some(col => col.name === 'preferred_location');
+  if (!hasPreferredLocation) {
+    db.exec('ALTER TABLE users ADD COLUMN preferred_location TEXT;');
+  }
+} catch (e) {
+  console.warn('Migration note:', e.message);
+}
+
+
 /**
  * Execute query and return array of objects
  */
