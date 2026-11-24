@@ -1850,3 +1850,89 @@ body.erlux-modal-open {
         display: none !important;
     }
 }
+
+/* ERLUX Brand Visibility Enhancements */
+.journal-tagline {
+    font-size: 16px;
+    color: #666;
+    margin-top: 10px;
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.subscribe-tagline {
+    display: block;
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-top: 6px;
+    font-family: var(--body-fonts);
+}
+
+.footer-brand-title {
+    margin-bottom: 15px;
+}
+
+.footer-brand-title .brand-name {
+    display: block;
+    font-family: var(--title-fonts);
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--white-color);
+    letter-spacing: 2px;
+    line-height: 1.2;
+}
+
+.footer-brand-tagline {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: #FA6218;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-top: 5px;
+}
+
+/* Instagram Centered Badge Enhancement */
+.instagram-title h2 a {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    color: var(--black-color);
+}
+
+.instagram-title .insta-discover {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #FA6218;
+    font-weight: 700;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.instagram-title .insta-handle {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: 1px;
+}
+
+.instagram-title .insta-handle i {
+    color: #FA6218;
+}
+
+@media (max-width: 991px) {
+    .instagram-title .insta-handle {
+        font-size: 20px;
+    }
+    .instagram-title .insta-discover {
+        font-size: 11px;
+        letter-spacing: 2px;
+    }
+}
